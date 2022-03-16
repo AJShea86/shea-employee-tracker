@@ -1,7 +1,17 @@
 const inquirer = require("inquirer");
-const table = require("console.table")
-const mysql = require('mysql2');
+const table = require("console.table");
+const mysql2 = require("mysql2");
 
+const db = mysql2.createConnection(
+  {
+    host: "localhost",
+    //port: 3001, //not sure if i need this? module 21 in lecture
+    user: "root",
+    password: "root",
+    database: "employees_db",
+  },
+  console.log(`Connected to the employees_db database.`)
+);
 
 // this function asks the initial questions
 function mainPrompt() {
@@ -44,68 +54,90 @@ function mainPrompt() {
 }
 
 function viewAllDepts() {
-  console.log("get depts from database");
-  //mysql to view depts from the database
-  //need to view department names and department id
+  db.query(`SELECT * FROM dept`, function (err, data) {
+    console.table(data);
+  });
   mainPrompt();
 }
 
 function viewAllRoles() {
-  console.log("get roles from database");
-  //mysql to view depts from the database
-  //need to view the job title, role id, the department that role belongs to, and the salary for that role
+  db.query(
+    `SELECT role.id, role.title, dept.dept_name, role.salary FROM role
+  JOIN dept ON dept.id = role.dept_id`,
+    function (err, data) {
+      console.table(data);
+    }
+  );
   mainPrompt();
 }
 
 function viewAllEmps() {
-  console.log("view all employees from database");
-  //mysql to view depts from the database
-  //need to view including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+  db.query(
+    `SELECT role.id, 
+  role.title, 
+  role.salary, 
+  role.dept_id, 
+  dept.dept_name, 
+  employee.first_name, 
+  employee.last_name, 
+  employee.manager_id 
+  FROM role
+  INNER JOIN dept ON dept.id = role.dept_id
+  INNER JOIN employee ON employee.id = employee.id`,
+    function (err, data) {
+      console.table(data);
+    }
+  );
+
   mainPrompt();
 }
 
 function addDept() {
-  console.log("add dept to database");
-  //mysql to view depts from the database
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "What is the name of the department?",
-      name: "deptName"
-    }
-  ])
-  .then()//add answer to dept list
-
-  mainPrompt();
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of the department?",
+        name: "deptName",
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        `INSERT INTO dept VALUES (default, "${answer.deptName}");`,
+        (err, data) => {
+          console.table(data);
+          console.log(err);
+          mainPrompt();
+        }
+      );
+    });
 }
 
 function addRole() {
   console.log("add role to database");
   //mysql to view depts from the database
 
-  inquirer.prompt([
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What role do you want to add?",
+        name: "addedRole", //or list?
+      },
 
-    {
-      type: "input",
-      message: "What role do you want to add?",
-      name: "addedRole" //or list?
-    },
+      {
+        type: "input",
+        message: "What is the salary of this role?",
+        name: "addedRoleSalary", //or list?
+      },
 
-    {
-      type: "input",
-      message: "What is the salary of this role?",
-      name: "addedRoleSalary" //or list?
-    },
-
-    {
-      type: "input",
-      message: "What department does this role belong to?",
-      name: "addedRoleDept" //or list?
-    }
-
-
-  ])
-  .then()//add to database
+      {
+        type: "input",
+        message: "What department does this role belong to?",
+        name: "addedRoleDept", //or list?
+      },
+    ])
+    .then(); //add to database
 
   mainPrompt();
 }
@@ -113,64 +145,67 @@ function addRole() {
 function addEmployee() {
   console.log("add employee to database");
   //inquire .prompt here that asks the info about the employee
-  inquirer.prompt([
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        mesage: "What is the employee's first name?",
+        name: "firstName",
+      },
 
-    {
-      type: "input",
-      mesage: "What is the employee's first name?",
-      name: "firstName"
-    },
+      {
+        type: "input",
+        mesage: "What is the employee's last name",
+        name: "lastName",
+      },
 
-    {
-      type: "input",
-      mesage: "What is the employee's last name",
-      name: "lastName"
-    },
+      {
+        type: "list",
+        mesage: "What is the employee's role?",
+        name: "", //list of roles
+      },
 
-    {
-      type: "list",
-      mesage: "What is the employee's role?",
-      name: ""//list of roles
-    },
-
-    {
-      type: "list",
-      mesage: "Who is the employee's manager?",
-      name: ""//manager list
-    },
-
-  ])
-  .then()
+      {
+        type: "list",
+        mesage: "Who is the employee's manager?",
+        name: "", //manager list
+      },
+    ])
+    .then();
 
   //mysql to view depts from the database
   mainPrompt();
 }
+
 function updateEmployee() {
   console.log("updates employee from database");
   //mysql to view depts from the database
   //choose an employee to update
 
-  inquirer.prompt([
-    {
-      type: "list",
-      message: "Choose an employee to update",
-      choices: []//need to view employee list here
-    },
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Choose an employee ID to update",
+        name: "id",
+      },
 
-    {
-      type: "list",
-      message: "What is the employee's new role?",
-      choices: []// list or just any answer?
-    }
-
-
-  ]).then()
-
-  mainPrompt();
+      {
+        type: "input",
+        message: "What is the employee's new role?",
+        name: "answer",
+      },
+    ])
+    .then((data) => {
+      console.log(data);
+      mainPrompt();
+    });
 }
+
 function quitProgram() {
   console.log("quits the program");
   //mysql to view depts from the database
   process.exit();
 }
+
 mainPrompt();
