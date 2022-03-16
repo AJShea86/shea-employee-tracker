@@ -46,18 +46,21 @@ function mainPrompt() {
 function viewAllDepts() {
   console.log("get depts from database");
   //mysql to view depts from the database
+  //need to view department names and department id
   mainPrompt();
 }
 
 function viewAllRoles() {
   console.log("get roles from database");
   //mysql to view depts from the database
+  //need to view the job title, role id, the department that role belongs to, and the salary for that role
   mainPrompt();
 }
 
 function viewAllEmps() {
   console.log("view all employees from database");
   //mysql to view depts from the database
+  //need to view including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
   mainPrompt();
 }
 
