@@ -61,18 +61,81 @@ function viewAllEmps() {
 function addDept() {
   console.log("add dept to database");
   //mysql to view depts from the database
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the name of the department?",
+      name: "deptName"
+    }
+  ])
+  .then()//add answer to dept list
+
   mainPrompt();
 }
 
 function addRole() {
   console.log("add role to database");
   //mysql to view depts from the database
+
+  inquirer.prompt([
+
+    {
+      type: "input",
+      message: "What role do you want to add?",
+      name: "addedRole" //or list?
+    },
+
+    {
+      type: "input",
+      message: "What is the salary of this role?",
+      name: "addedRoleSalary" //or list?
+    },
+
+    {
+      type: "input",
+      message: "What department does this role belong to?",
+      name: "addedRoleDept" //or list?
+    }
+
+
+  ])
+  .then()//add to database
+
   mainPrompt();
 }
 
 function addEmployee() {
   console.log("add employee to database");
   //inquire .prompt here that asks the info about the employee
+  inquirer.prompt([
+
+    {
+      type: "input",
+      mesage: "What is the employee's first name?",
+      name: "firstName"
+    },
+
+    {
+      type: "input",
+      mesage: "What is the employee's last name",
+      name: "lastName"
+    },
+
+    {
+      type: "list",
+      mesage: "What is the employee's role?",
+      name: ""//list of roles
+    },
+
+    {
+      type: "list",
+      mesage: "Who is the employee's manager?",
+      name: ""//manager list
+    },
+
+  ])
+  .then()
+
   //mysql to view depts from the database
   mainPrompt();
 }
@@ -80,6 +143,23 @@ function updateEmployee() {
   console.log("updates employee from database");
   //mysql to view depts from the database
   //choose an employee to update
+
+  inquirer.prompt([
+    {
+      type: "list",
+      message: "Choose an employee to update",
+      choices: []//need to view employee list here
+    },
+
+    {
+      type: "list",
+      message: "What is the employee's new role?",
+      choices: []// list or just any answer?
+    }
+
+
+  ]).then()
+
   mainPrompt();
 }
 function quitProgram() {
