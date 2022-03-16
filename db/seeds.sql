@@ -12,8 +12,8 @@ VALUES
 ("Designer", 110000, 1),
 ("Accountant", 120000, 2),
 ("Engineer", 130000, 5),
-("Developer", 140000, 4);
-("Developer2", 140000, 4);
+("Junior Developer", 140000, 4),
+("Senior Developer", 150000, 4);
 
 
 INSERT INTO dept (dept_name)

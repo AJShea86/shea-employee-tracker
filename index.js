@@ -73,17 +73,17 @@ function viewAllRoles() {
 
 function viewAllEmps() {
   db.query(
-    `SELECT role.id, 
-  role.title, 
-  role.salary, 
-  role.dept_id, 
-  dept.dept_name, 
-  employee.first_name, 
-  employee.last_name, 
-  employee.manager_id 
-  FROM role
-  INNER JOIN dept ON dept.id = role.dept_id
-  INNER JOIN employee ON employee.id = employee.id`,
+    `SELECT employee.id, 
+    employee.first_name, 
+    employee.last_name,
+    employee.manager_id, 
+    role.title, 
+    role.salary, 
+    dept.dept_name AS department
+    FROM employee, role, dept
+    WHERE dept.id = role.dept_id
+    AND role.id = employee.role_id
+    ORDER BY employee.id ASC;`,
     function (err, data) {
       console.table(data);
     }
@@ -122,25 +122,39 @@ function addRole() {
       {
         type: "input",
         message: "What role do you want to add?",
-        name: "addedRole", //or list?
+        name: "addedRole", 
       },
 
       {
         type: "input",
         message: "What is the salary of this role?",
-        name: "addedRoleSalary", //or list?
+        name: "addedRoleSalary",
       },
 
       {
         type: "input",
-        message: "What department does this role belong to?",
-        name: "addedRoleDept", //or list?
+        message: "Add a department ID for this role.",
+        name: "addedRoleDept",
       },
     ])
-    .then(); //add to database
+    .then((answer) => {
+      console.log(answer)
+      db.query(
+        `INSERT INTO role VALUES (default,
+          "${answer.addedRole}",
+          "${answer.addedRoleSalary}",
+          "${answer.addedRoleDept}" 
+        )`,
+        (err, data) => {
+          console.table(data);
+          console.log(err);
 
-  mainPrompt();
-}
+          mainPrompt();
+
+    }); 
+
+});
+};
 
 function addEmployee() {
   console.log("add employee to database");
@@ -162,20 +176,20 @@ function addEmployee() {
       {
         type: "list",
         mesage: "What is the employee's role?",
-        name: "", //list of roles
+        name: "", 
       },
 
       {
         type: "list",
         mesage: "Who is the employee's manager?",
-        name: "", //manager list
+        name: "", 
       },
     ])
     .then();
 
   //mysql to view depts from the database
   mainPrompt();
-}
+};
 
 function updateEmployee() {
   console.log("updates employee from database");
