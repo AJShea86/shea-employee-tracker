@@ -1,6 +1,9 @@
 const inquirer = require("inquirer");
 const table = require("console.table")
+const mysql = require('mysql2');
 
+
+// this function asks the initial questions
 function mainPrompt() {
   inquirer
     .prompt({
