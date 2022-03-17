@@ -122,7 +122,7 @@ function addRole() {
       {
         type: "input",
         message: "What role do you want to add?",
-        name: "addedRole", 
+        name: "addedRole",
       },
 
       {
@@ -138,7 +138,7 @@ function addRole() {
       },
     ])
     .then((answer) => {
-      console.log(answer)
+      console.log(answer);
       db.query(
         `INSERT INTO role VALUES (default,
           "${answer.addedRole}",
@@ -150,11 +150,10 @@ function addRole() {
           console.log(err);
 
           mainPrompt();
-
-    }); 
-
-});
-};
+        }
+      );
+    });
+}
 
 function addEmployee() {
   console.log("add employee to database");
@@ -174,21 +173,30 @@ function addEmployee() {
       },
 
       {
-        type: "list",
-        mesage: "What is the employee's role?",
-        name: "", 
+        type: "input",
+        mesage: "What is the employee's role ID?",
+        name: "empRoleID",
       },
 
       {
-        type: "list",
-        mesage: "Who is the employee's manager?",
-        name: "", 
+        type: "input",
+        mesage: "Who is the employee's manager ID?",
+        name: "empManagerID",
       },
     ])
-    .then();
+    .then((answer)=>{
+      db.query(
+        `INSERT INTO employee VALUES (default,
+          "${answer.firstName}",
+          "${answer.lastName}",
+          "${answer.empRoleID}",
+          "${answer.empManagerID}")`
+      )
+      mainPrompt();
+
+    });
 
   //mysql to view depts from the database
-  mainPrompt();
 };
 
 function updateEmployee() {
