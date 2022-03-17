@@ -1,0 +1,2 @@
+This is a command line application designed to help you manage your company's employee database. This application uses Node.js, Inquirer, and MySQL. Before starting the application, write "npm i" into the command line to install the dependencies. To start the application, type "node index" into the command line and begin answering the prompts. You can add new employees, roles, departments, and update an employee's role, then view the changes in the command line, then exit the application once finished. 
+
