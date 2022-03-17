@@ -2,6 +2,6 @@ This is a command line application designed to help you manage your company's em
 
 https://github.com/AJShea86/shea-employee-tracker
 
-
+https://www.youtube.com/watch?v=lrnVeCDDhuU&ab_channel=AJShea
 
 ![Employee-tracker-screenshot](https://user-images.githubusercontent.com/97988155/158730349-123ab9b4-f01b-4cd0-bb2e-7d9a9bcb7253.png)
